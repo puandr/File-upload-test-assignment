@@ -1,9 +1,6 @@
 package com.example.file_upload.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +9,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @Entity
+@Table(name = "file_entity")
 public class FileEntity {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -20,12 +18,14 @@ public class FileEntity {
     private String fileType;
     private String uploader;
     private LocalDateTime uploadedAt;
+    private String metadata;
 
-    public FileEntity(String fileName, String fileType, String uploader, LocalDateTime uploadedAt) {
+    public FileEntity(String fileName, String fileType, String uploader, LocalDateTime uploadedAt, String metadata) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.uploader = uploader;
         this.uploadedAt = uploadedAt;
+        this.metadata = metadata;
     }
 
 }

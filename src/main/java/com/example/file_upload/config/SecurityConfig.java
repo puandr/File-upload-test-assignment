@@ -15,8 +15,12 @@ public class SecurityConfig {
         http
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/files/upload", "/ping").permitAll()
+                        //TODO remove h2
+                        .requestMatchers("/files/upload", "/ping", "/h2-console/**").permitAll()
                         .anyRequest().authenticated()
+                )
+                .headers(headers -> headers
+                        .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 )
                 .httpBasic(Customizer.withDefaults());
         return http.build();
