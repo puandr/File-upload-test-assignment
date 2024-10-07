@@ -7,6 +7,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +21,7 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
-    public String uploadFile(MultipartFile file, String uploader) {
+    public String uploadFile(MultipartFile file, String uploader) throws IOException {
         if (isInvalidFileType(file)) {
             //TODO logging, correct negative response
 //            throw new RuntimeException("File type not allowed");
@@ -35,7 +36,8 @@ public class FileService {
                 file.getContentType(),
                 uploader,
                 LocalDateTime.now(),
-                metadata
+                metadata,
+                file.getBytes()
         );
 
         fileRepository.save(fileEntity);

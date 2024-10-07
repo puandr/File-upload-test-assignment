@@ -20,12 +20,16 @@ public class FileEntity {
     private LocalDateTime uploadedAt;
     private String metadata;
 
-    public FileEntity(String fileName, String fileType, String uploader, LocalDateTime uploadedAt, String metadata) {
+    @Lob
+    private byte[] fileData;
+
+    public FileEntity(String fileName, String fileType, String uploader, LocalDateTime uploadedAt, String metadata, byte[] fileData) {
         this.fileName = fileName;
         this.fileType = fileType;
         this.uploader = uploader;
         this.uploadedAt = uploadedAt;
         this.metadata = metadata;
+        this.fileData = fileData;
     }
 
 }

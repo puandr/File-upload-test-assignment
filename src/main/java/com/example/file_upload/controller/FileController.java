@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+
 @RestController
 @RequestMapping("/files")
 public class FileController {
@@ -20,8 +22,12 @@ public class FileController {
     //TODO uploader - is it a good naming?
     @PostMapping("/upload")
     public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("uploader") String uploader) {
-        String responseMessage = fileService.uploadFile(file, uploader);
-        return ResponseEntity.ok(responseMessage);
+        try {
+            String responseMessage = fileService.uploadFile(file, uploader);
+            return ResponseEntity.ok(responseMessage);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage() );
+        }
     }
 
 }
