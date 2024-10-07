@@ -16,9 +16,12 @@ public class SecurityConfig {
                 .csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
                         //TODO remove h2
-                        .requestMatchers("/files/upload", "/ping", "/h2-console/**").permitAll()
+                        .requestMatchers("/files/upload").permitAll()
+                        .requestMatchers("/ping").permitAll()
+                        .requestMatchers("/h2-console/**").permitAll()
                         .anyRequest().authenticated()
                 )
+                //TODO remove frames, needed only for H2 console
                 .headers(headers -> headers
                         .frameOptions(frameOptions -> frameOptions.sameOrigin())
                 )

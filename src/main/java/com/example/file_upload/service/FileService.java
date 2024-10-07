@@ -22,8 +22,9 @@ public class FileService {
 
     public String uploadFile(MultipartFile file, String uploader) {
         if (isInvalidFileType(file)) {
-            //TODO logging, negative answer
-            throw new RuntimeException("File type not allowed");
+            //TODO logging, correct negative response
+//            throw new RuntimeException("File type not allowed");
+            return "File type not allowed";
         }
 
         String fileExtension = getFileExtension(file.getOriginalFilename());
