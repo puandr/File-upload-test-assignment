@@ -1,5 +1,6 @@
 package com.example.file_upload.service;
 
+import com.example.file_upload.dto.FileDto;
 import com.example.file_upload.entity.FileEntity;
 import com.example.file_upload.repository.FileRepository;
 import org.springframework.stereotype.Service;
@@ -9,8 +10,11 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class FileService {
@@ -73,6 +77,29 @@ public class FileService {
         }
 
         return "No metadata";
+    }
+
+    public List<FileDto> getFilesByUploader(String uploader) {
+        List<FileEntity> fileEntities = fileRepository.findByUploader(uploader);
+        List<FileDto> fileDtos = new ArrayList<>();
+
+        for (FileEntity fileEntity : fileEntities) {
+            FileDto fileDto = convertToFileDto(fileEntity);
+            fileDtos.add(fileDto);
+        }
+
+        return fileDtos;
+    }
+
+    private FileDto convertToFileDto(FileEntity fileEntity) {
+        return new FileDto(
+                fileEntity.getId(),
+                fileEntity.getFileName(),
+                fileEntity.getFileType(),
+                fileEntity.getUploader(),
+                fileEntity.getUploadedAt(),
+                fileEntity.getMetadata()
+        );
     }
 
 }

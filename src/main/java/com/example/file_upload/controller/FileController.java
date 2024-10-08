@@ -1,14 +1,14 @@
 package com.example.file_upload.controller;
 
+import com.example.file_upload.dto.FileDto;
+import com.example.file_upload.entity.FileEntity;
 import com.example.file_upload.service.FileService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequestMapping("/files")
@@ -28,6 +28,13 @@ public class FileController {
         } catch (IOException e) {
             return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage() );
         }
+    }
+
+    @GetMapping("/uploaded-by")
+    public ResponseEntity<List<FileDto>> getFileByUploader(@RequestParam("uploader") String uploader) {
+        List<FileDto> files = fileService.getFilesByUploader(uploader);
+        return ResponseEntity.ok(files);
+        //TODO if no user?
     }
 
 }

@@ -23,6 +23,10 @@ public class FileEntity {
     @Lob
     private byte[] fileData;
 
+    public FileEntity() {
+
+    }
+
     public FileEntity(String fileName, String fileType, String uploader, LocalDateTime uploadedAt, String metadata, byte[] fileData) {
         this.fileName = fileName;
         this.fileType = fileType;
