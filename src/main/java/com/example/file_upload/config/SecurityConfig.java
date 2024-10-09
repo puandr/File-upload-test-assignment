@@ -21,6 +21,7 @@ public class SecurityConfig {
                         .requestMatchers("/ping").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/files/uploaded-by").permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 //TODO remove frames, needed only for H2 console
