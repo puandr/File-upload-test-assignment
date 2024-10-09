@@ -3,23 +3,27 @@ package com.example.file_upload.service;
 import com.example.file_upload.dto.FileDto;
 import com.example.file_upload.entity.FileEntity;
 import com.example.file_upload.repository.FileRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 public class FileService {
     private final FileRepository fileRepository;
     private final RestTemplate restTemplate = new RestTemplate();
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
 
     public FileService(FileRepository fileRepository) {
         this.fileRepository = fileRepository;
@@ -79,6 +83,7 @@ public class FileService {
         return "No metadata";
     }
 
+    @Cacheable(value = "filesByUploader", key = "#uploader")
     public List<FileDto> getFilesByUploader(String uploader) {
         List<FileEntity> fileEntities = fileRepository.findByUploader(uploader);
         List<FileDto> fileDtos = new ArrayList<>();

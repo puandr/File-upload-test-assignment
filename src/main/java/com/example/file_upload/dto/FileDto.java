@@ -3,11 +3,12 @@ package com.example.file_upload.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Getter
 @Setter
-public class FileDto {
+public class FileDto implements Serializable {
     private Long id;
     private String fileName;
     private String fileType;
