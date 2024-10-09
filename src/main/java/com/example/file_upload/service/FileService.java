@@ -4,6 +4,7 @@ import com.example.file_upload.dto.FileDto;
 import com.example.file_upload.entity.FileEntity;
 import com.example.file_upload.repository.FileRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -29,6 +30,7 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
+    @CacheEvict(value = "filesByUploader", key = "#uploader")
     public String uploadFile(MultipartFile file, String uploader) throws IOException {
         if (isInvalidFileType(file)) {
             //TODO logging, correct negative response
