@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.HttpStatus;
@@ -35,8 +36,8 @@ public class FileService {
         this.fileRepository = fileRepository;
     }
 
-    @CacheEvict(value = "filesByUploader", key = "#uploader")
-    public String uploadFile(MultipartFile file, String uploader) throws IOException {
+    @CachePut(value = "filesByUploader", key = "#uploader")
+    public List<FileDto> uploadFile(MultipartFile file, String uploader) throws IOException {
         if (isInvalidFileType(file)) {
             logger.warn("FileService - File type is invalid: {}", file.getContentType());
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "File type not allowed");
@@ -57,7 +58,7 @@ public class FileService {
         fileRepository.save(fileEntity);
 
         logger.info("FileService - File upload successfully: {}, by uploader: ", file.getOriginalFilename(), uploader);
-        return "File uploaded succesfully";
+        return getFilesByUploader(uploader);
     }
 
     private boolean isInvalidFileType(MultipartFile file) {

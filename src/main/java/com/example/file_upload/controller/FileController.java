@@ -33,18 +33,22 @@ public class FileController {
                     content = @Content(schema = @Schema(implementation = String.class)))
     })
     @PostMapping("/upload")
-    public ResponseEntity<String> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("uploader") String uploader) {
+    public ResponseEntity<List<FileDto>> uploadFile(@RequestParam("file")MultipartFile file, @RequestParam("uploader") String uploader) {
         try {
             logger.info("File Controller - Uploadin file: {}, by uploader {}", file.getOriginalFilename(), uploader);
-            String responseMessage = fileService.uploadFile(file, uploader);
+            List<FileDto> files = fileService.uploadFile(file, uploader);
             logger.info("File Controller - File uploaded successfully: {}", file.getOriginalFilename());
 
-            return ResponseEntity.ok(responseMessage);
+            return ResponseEntity.ok(files);
         } catch (IOException e) {
             logger.error("File Controller - Error on uploading file: {}", file.getOriginalFilename());
             logger.error(e.getMessage());
 
-            return ResponseEntity.status(500).body("Error uploading file: " + e.getMessage() );
+            return ResponseEntity.status(500).body(null);
+        } catch (IllegalArgumentException e) {
+            logger.error("File Controller - Invalid file type: {}", file.getOriginalFilename());
+            logger.error((e.getMessage()));
+            return ResponseEntity.status(400).body(null);
         }
     }
 
